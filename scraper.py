@@ -18,11 +18,9 @@ chrome_options.page_load_strategy = 'eager'
 
 driver = webdriver.Chrome(service=service, options=chrome_options)
 
-driver.get("https://finance.yahoo.com/calendar/earnings/")
-
 base_url = "https://finance.yahoo.com/calendar/earnings"
-symbol = "AAPL"
-size = 25
+
+driver.get(base_url)
 
 driver.execute_script("""
     var buttons = document.querySelectorAll('button');
