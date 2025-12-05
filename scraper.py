@@ -32,14 +32,18 @@ driver.execute_script("""
 """)
 
 page_string = BeautifulSoup(driver.page_source, 'html.parser').find(class_="total")
-number_of_pages = page_string.get_text(strip=True).split()[-1]
-# print(number_of_pages)
+
+if page_string is None:
+    number_of_pages = "1"
+else:
+    number_of_pages = page_string.get_text(strip=True).split()[-1]
 
 for offset in range(0, int(number_of_pages)): 
     driver.get(base_url)
-    time.sleep(2) 
+    time.sleep(2)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
-    links = soup.find_all('a', attrs={'href': re.compile(r'/quote/[A-Z]+/')})
+    section = soup.find('section', class_='main yf-93c5lg')
+    links = section.find_all('a', attrs={'href': re.compile(r'/quote/[A-Z]+/')})
     for l in links:
         href = l.get("href")
         if href and href.startswith("http"):
