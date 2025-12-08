@@ -19,6 +19,7 @@ chrome_options.page_load_strategy = 'eager'
 driver = webdriver.Chrome(service=service, options=chrome_options)
 
 base_url = "https://finance.yahoo.com/calendar/earnings"
+fin_base_url = "https://finance.yahoo.com"
 
 driver.get(base_url)
 
@@ -49,14 +50,22 @@ for offset in range(0, int(number_of_pages)):
         if href and href.startswith("http"):
             pass
         else:
-            # print(href + "financials/")
-            driver.get(base_url + href + "financials/")
+            # print(fin_base_url + href + "financials/")
+            driver.get(fin_base_url + href + "financials/")
             soup_l2 = BeautifulSoup(driver.page_source, 'html.parser')
             # print(soup_l2.get_text(strip=True))
-            section_l2 = soup_l2.find('section', class_='gridLayout yf-93c5lg')
-            # Problem to find section
-            table_header = section_l2.find('section', class_='finContainer yf-yuwun0')
-            print(table_header.get_text(strip=True))
+            driver.execute_script("""
+                var buttons = document.querySelectorAll('button');
+                for(var btn of buttons) {
+                    if(btn.textContent.includes('Quarterly')){
+                        btn.click(); break;
+                    }
+                }
+            """)
+            section_l2 = soup_l2.find('section', class_='finContainer yf-yuwun0')
+            print(section_l2)
+
+           
 
 
     time.sleep(2) 
