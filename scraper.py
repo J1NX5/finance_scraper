@@ -49,8 +49,15 @@ for offset in range(0, int(number_of_pages)):
         if href and href.startswith("http"):
             pass
         else:
-            print(href)
-            # driver.get(base_url + href)
+            # print(href + "financials/")
+            driver.get(base_url + href + "financials/")
+            soup_l2 = BeautifulSoup(driver.page_source, 'html.parser')
+            # print(soup_l2.get_text(strip=True))
+            section_l2 = soup_l2.find('section', class_='gridLayout yf-93c5lg')
+            # Problem to find section
+            table_header = section_l2.find('section', class_='finContainer yf-yuwun0')
+            print(table_header.get_text(strip=True))
+
 
     time.sleep(2) 
 
