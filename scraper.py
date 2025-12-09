@@ -75,12 +75,11 @@ for offset in range(0, int(number_of_pages)):
             # print(section_l2)
             # column = section_l2.find_all(class_="column")
             row = section_l2.find_all(class_="row")
-            daten = []
             for r in row:
-                columns = r.select("div.column")
-                values = [c.get_text(strip=True) for c in columns]
+                column = r.select("div.column")
+                values = [c.get_text(strip=True) for c in column]
+                # earning_data[symbol] = [c.get_text(strip=True) for c in columns]
                 print(values)
-                # daten.append(values)
         
     time.sleep(2) 
 
