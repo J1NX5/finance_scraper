@@ -7,6 +7,7 @@ import time
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import re
+import pandas as pd
 
 service = Service('/usr/bin/chromedriver')
 
@@ -75,11 +76,18 @@ for offset in range(0, int(number_of_pages)):
             # print(section_l2)
             # column = section_l2.find_all(class_="column")
             row = section_l2.find_all(class_="row")
+            data = []
             for r in row:
                 column = r.select("div.column")
                 values = [c.get_text(strip=True) for c in column]
                 # earning_data[symbol] = [c.get_text(strip=True) for c in columns]
-                print(values)
+                data.append(values)
+                # print(data)
+            header = data[0]
+            data = data[1:]
+            df = pd.DataFrame(data, columns=header)
+            print(df[["TTM"]])   
+
         
     time.sleep(2) 
 
