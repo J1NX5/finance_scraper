@@ -86,7 +86,8 @@ for offset in range(0, int(number_of_pages)):
             header = data[0]
             data = data[1:]
             df = pd.DataFrame(data, columns=header)
-            print(df[["TTM"]])   
+            #print(df[["TTM"]])  
+            print(df.to_string()) 
 
         
     time.sleep(2) 
