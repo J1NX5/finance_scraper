@@ -39,6 +39,8 @@ if page_string is None:
 else:
     number_of_pages = page_string.get_text(strip=True).split()[-1]
 
+# in earning_data is the final result
+earning_data = dict()
 for offset in range(0, int(number_of_pages)): 
     driver.get(base_url)
     time.sleep(2)
@@ -46,7 +48,14 @@ for offset in range(0, int(number_of_pages)):
     section = soup.find('section', class_='main yf-93c5lg')
     links = section.find_all('a', attrs={'href': re.compile(r'/quote/[A-Z]+/')})
     for l in links:
+        # at this point we need to extract the symbol from the link
         href = l.get("href")
+
+        # filter symbol
+        parts = [p for p in href.split("/") if p]
+        symbol = parts[-1]
+        print(f'Symbol: {symbol}')
+
         if href and href.startswith("http"):
             pass
         else:
