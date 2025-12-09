@@ -64,10 +64,15 @@ for offset in range(0, int(number_of_pages)):
             """)
             section_l2 = soup_l2.find('section', class_='finContainer yf-yuwun0')
             # print(section_l2)
-            column = section_l2.find_all(class_="column")
+            # column = section_l2.find_all(class_="column")
             row = section_l2.find_all(class_="row")
-            for c in column:
-                print(c.get_text(strip=True))
+            daten = []
+            for r in row:
+                columns = r.select("div.column")
+                values = [c.get_text(strip=True) for c in columns]
+                print(values)
+                # daten.append(values)
+        
     time.sleep(2) 
 
 driver.quit()
