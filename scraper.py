@@ -8,6 +8,11 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import re
 import pandas as pd
+from datetime import datetime
+import json
+
+# date_today for cvs name
+date_today = datetime.today().strftime('%Y-%m-%d')
 
 service = Service('/usr/bin/chromedriver')
 
@@ -86,10 +91,23 @@ for offset in range(0, int(number_of_pages)):
             header = data[0]
             data = data[1:]
             df = pd.DataFrame(data, columns=header)
+            df_filtered = df.iloc[:, [0,2]]
+            date_from_data = df_filtered.columns[1]
+            #print(date_from_data)
             #print(df[["TTM"]])  
-            print(df.to_string()) 
-
-        
+            #print(df_filtered.to_string())
+            file_name = str(symbol + "_" + date_today)
+            # df_filtered.to_json("reports/" + file_name, orient='records')
+            data_struct = {
+                symbol : {
+                    date_from_data : {
+                        df_filtered.iloc[i, 0]: df_filtered.iloc[i, 1] for i in range(len(df_filtered))
+                    }
+                }
+            }
+            # print(symbol)
+            with open('reports/' + file_name, 'w') as f:
+                json.dump(data_struct, f, indent=4)
     time.sleep(2) 
 
 driver.quit()

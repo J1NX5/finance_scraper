@@ -29,3 +29,4 @@ pip install -r requirements.txt
 ```bash
 python scraper.py
 ```
+The scraper will create a folder named reports. The current incoming of the earning from today in there as json-file.
