@@ -78,26 +78,28 @@ for offset in range(0, int(number_of_pages)):
                 }
             """)
             section_l2 = soup_l2.find('section', class_='finContainer yf-yuwun0')
-            # print(section_l2)
-            # column = section_l2.find_all(class_="column")
             row = section_l2.find_all(class_="row")
             data = []
             for r in row:
                 column = r.select("div.column")
                 values = [c.get_text(strip=True) for c in column]
-                # earning_data[symbol] = [c.get_text(strip=True) for c in columns]
                 data.append(values)
-                # print(data)
+            
+            #create struct for pandas
             header = data[0]
             data = data[1:]
+
+            #create pandasframe
             df = pd.DataFrame(data, columns=header)
+
+            ## filter for data and create new frame -> only comlum 0 and 2
             df_filtered = df.iloc[:, [0,2]]
+
+            #prepare fields for jsons struct
             date_from_data = df_filtered.columns[1]
-            #print(date_from_data)
-            #print(df[["TTM"]])  
-            #print(df_filtered.to_string())
             file_name = str(symbol + "_" + date_today)
-            # df_filtered.to_json("reports/" + file_name, orient='records')
+
+            # create a struct for json export
             data_struct = {
                 symbol : {
                     date_from_data : {
@@ -105,7 +107,8 @@ for offset in range(0, int(number_of_pages)):
                     }
                 }
             }
-            # print(symbol)
+
+            #write in file
             with open('reports/' + file_name, 'w') as f:
                 json.dump(data_struct, f, indent=4)
     time.sleep(2) 
